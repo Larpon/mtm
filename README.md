@@ -1,11 +1,12 @@
 mtm
 ===
 
-# Media Tool Menu - Convertion between selected formats as KDE4 service menus
+# Media Tool Menu
+## - Convertion between selected formats integrated as KDE4 service menus
 
 # Author
-Original author: Lars Pontoppidan <leverpostej@gmail.com>
-with strong inspiration from Kim written by
+Original author: Lars Pontoppidan
+Strong inspiration from *Kim* written by
 Charles Bouveyron (http://bouveyron.free.fr/kim)
 
 # License
