@@ -15,8 +15,8 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation.
 
 # Description
-The Media Tool Menu KDE4 service menu (MTM) is a bunch
-of KDE¤ service menus that integrates into konqueror, dolphin or any other software that utilitize KDE4 service menus.
+The Media Tool Menu (MTM) KDE4 service menus is a bunch
+of KDE4 service menus that integrates into konqueror, dolphin or any other software that utilitize KDE4 service menus.
 
 The tool scripts can convert to and from various audio formats as well as dump audio from .flv videos
 The service menus are using shell scripts and common audio and video commandline tools to do all the hard work.
