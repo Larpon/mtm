@@ -69,9 +69,9 @@ As of now MTM specializes in converting:
 
 # Integration
 The menu will be installed as:  
-<right click> -> Actions -> Convert  
+*right click* -> Actions -> Convert  
 or  
-<right click> -> Actions -> Dump Audio  
+*right click* -> Actions -> Dump Audio  
 Depending on the file type  
 
 Enjoy!  
