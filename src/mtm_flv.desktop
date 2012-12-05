@@ -1,0 +1,39 @@
+# Media Tool Menu
+#
+# Original author: Lars Pontoppidan <leverpostej@gmail.com>
+# with strong inspiration from Kim written by
+# Charles Bouveyron (http://bouveyron.free.fr/kim)
+# All hail the contributors as well
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation.
+
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=video/x-flv
+Actions=2wav;2mp3;2ogg;about;
+Encoding=UTF-8
+X-KDE-Submenu=Audio dump
+
+[Desktop Action 2wav]
+Name=wav
+Icon=audio-x-wav
+Exec=mtm_x2x flv wav %U
+
+[Desktop Action 2mp3]
+Name=mp3
+Icon=audio-x-wav
+Exec=mtm_x2x flv mp3 %U
+
+[Desktop Action 2ogg]
+Name=ogg
+Icon=audio-x-wav
+Exec=mtm_x2x flv ogg %U
+
+[Desktop Action about]
+Name=About MTM
+Name[da]=Om MTM
+Icon=help
+Exec=mtm_utility about

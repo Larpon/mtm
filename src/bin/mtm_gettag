@@ -1,0 +1,177 @@
+#!/bin/bash
+#
+# Media Tool Menu
+#
+# Original author: Lars Pontoppidan <leverpostej@gmail.com>
+# with strong inspiration from Kim written by
+# Charles Bouveyron (http://bouveyron.free.fr/kim)
+# All hail the contributors as well
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation.
+
+
+command_exists () {
+    command -v "$1" >/dev/null;
+}
+
+filePath="$1"
+fileDir=$(dirname "$filePath")
+filename=$(basename "$filePath")
+fileExtension=${filename##*.}
+filename=${filename%.*}
+
+returnValue="$2"
+
+packageName="mtm"
+
+# Init tags
+tagTitle=""
+tagArtist=""
+tagAlbum=""
+tagDate=""
+tagYear=""
+tagComment=""
+tagTrackNumber=""
+tagGenre=""
+tagPublisher=""
+tagLanguage=""
+tagEncoder=""
+
+
+if [ "$fileExtension" == "mp3" ]; then
+	
+	if command_exists id3v2 ; then
+		# Try v2 tags
+		tagTitle="`id3v2 -l "$filePath" | sed -n '/^TIT2/s/^.*: //p'`"
+		tagArtist="`id3v2 -l "$filePath" | sed -n '/^TPE1/s/^.*: //p'`"
+		tagAlbum="`id3v2 -l "$filePath" | sed -n '/^TALB/s/^.*: //p'`"
+		tagDate="`id3v2 -l "$filePath" | sed -n '/^TDAT/s/^.*: //p'`"
+		tagYear="`id3v2 -l "$filePath" | sed -n '/^TYER/s/^.*: //p'`"
+		tagComment="`id3v2 -l "$filePath" | sed -n '/^COMM/s/^.*: //p'`"
+		tagTrackNumber="`id3v2 -l "$filePath" | sed -n '/^TRCK/s/^.*: //p'`"
+		tagGenre="`id3v2 -l "$filePath" | sed -n '/^TCON/s/^.*: //p' | sed 's/ (.*//'`"
+		tagPublisher="`id3v2 -l "$filePath" | sed -n '/^TPUB/s/^.*: //p'`"
+		tagLanguage="`id3v2 -l "$filePath" | sed -n '/^TLAN/s/^.*: //p'`"
+		tagEncoder="`id3v2 -l "$filePath" | sed -n '/^TSSE/s/^.*: //p'`"
+		
+		# Try v1 tags if v2 tags are blank
+		if [ "$tagTitle" == "" ]; then
+			tagTitle="`id3v2 -l "$filePath" | grep -i 'Title  : ' | sed -e 's/Title  : //g' | sed -e 's/ Artist:.*//g'`"
+		fi
+		if [ "$tagArtist" == "" ]; then
+			tagArtist="`id3v2 -l "$filePath" | grep -i 'Title  : ' | sed -e 's/.*Artist: //g'`"
+		fi
+		if [ "$tagAlbum" == "" ]; then
+			tagAlbum="`id3v2 -l "$filePath" | grep -i 'Album  : ' | sed -e 's/Album  : //g' | sed -e 's/ Year:.*//g'`"
+		fi
+		if [ "$tagYear" == "" ]; then
+			tagYear="`id3v2 -l "$filePath" | grep -i 'Album  : ' | sed -e 's/Album.*Year: //g' | sed -e 's/,.*//g'`"
+		fi
+		if [ "$tagDate" == "" ]; then
+			tagDate="$tagYear"
+		fi
+		if [ "$tagComment" == "" ]; then
+			tagComment="`id3v2 -l "$filePath" | grep -i 'Comment: ' | sed -e 's/Comment: //g' | sed -e 's/ Track:.*//g'`"
+		fi
+		if [ "$tagTrackNumber" == "" ]; then
+			tagTrackNumber="`id3v2 -l "$filePath" | grep -i 'Comment: ' | sed -e 's/Comment:.*Track: //g'`"
+		fi
+		if [ "$tagGenre" == "" ]; then
+			tagGenre="`id3v2 -l "$filePath" | grep -i 'Album  : ' | sed -e 's/Album.*Genre: //g' | sed -e 's/ (.*//g'`"
+		fi
+		if [ "$tagPublisher" == "" ]; then
+			tagPublisher=""
+		fi
+	fi
+fi
+
+if [ "$fileExtension" == "ogg" ]; then
+	if command_exists vorbiscomment ; then
+		tagTitle="`vorbiscomment -l "$filePath" | grep -i 'TITLE=' | sed -e 's/.*TITLE=//ig'`"
+		tagArtist="`vorbiscomment -l "$filePath" | grep -i 'ARTIST=' | sed -e 's/.*ARTIST=//ig'`"
+		tagAlbum="`vorbiscomment -l "$filePath" | grep -i 'ALBUM=' | sed -e 's/.*ALBUM=//ig'`"
+		tagDate="`vorbiscomment -l "$filePath" | grep -i 'DATE=' | sed -e 's/.*DATE=//ig'`"
+		tagYear="`vorbiscomment -l "$filePath" | grep -i 'YEAR=' | sed -e 's/.*YEAR=//ig'`"
+		tagComment="`vorbiscomment -l "$filePath" | grep -i 'COMMENT=' | sed -e 's/.*COMMENT=//ig'`"
+		tagTrackNumber="`vorbiscomment -l "$filePath" | grep -i 'TRACKNUMBER=' | sed -e 's/.*TRACKNUMBER=//ig'`"
+		tagGenre="`vorbiscomment -l "$filePath" | grep -i 'GENRE=' | sed -e 's/.*GENRE=//ig'`"
+		tagPublisher="`vorbiscomment -l "$filePath" | grep -i 'PUBLISHER=' | sed -e 's/.*PUBLISHER=//ig'`"
+		tagLanguage="`vorbiscomment -l "$filePath" | grep -i 'LANGUAGE=' | sed -e 's/.*LANGUAGE=//ig'`"
+		tagEncoder="`vorbiscomment -l "$filePath" | grep -i 'ENCODER=' | sed -e 's/.*ENCODER=//ig'`"
+	fi
+fi
+
+if [ "$fileExtension" == "flac" ]; then
+	if command_exists metaflac ; then
+		tagTitle="`metaflac --show-tag=TITLE "$filePath" | sed -e 's/.*TITLE=//ig'`"
+		tagArtist="`metaflac --show-tag=ARTIST "$filePath" | sed -e 's/.*ARTIST=//ig'`"
+		tagAlbum="`metaflac --show-tag=ALBUM "$filePath" | sed -e 's/.*ALBUM=//ig'`"
+		tagDate="`metaflac --show-tag=DATE "$filePath" | sed -e 's/.*DATE=//ig'`"
+		tagYear="`metaflac --show-tag=DATE "$filePath" | sed -e 's/.*DATE=//ig'`"
+		tagComment="`metaflac --show-tag=COMMENT "$filePath" | sed -e 's/.*COMMENT=//ig'`"
+		tagTrackNumber="`metaflac --show-tag=TRACKNUMBER "$filePath" | sed -e 's/.*TRACKNUMBER=//ig'`"
+		tagGenre="`metaflac --show-tag=GENRE "$filePath" | sed -e 's/.*GENRE=//ig'`"
+		tagPublisher="`metaflac --show-tag=PUBLISHER "$filePath" | sed -e 's/.*PUBLISHER=//ig'`"
+		tagLanguage="`metaflac --show-tag=LANGUAGE "$filePath" | sed -e 's/.*LANGUAGE=//ig'`"
+		tagEncoder="`metaflac --show-tag=ENCODER "$filePath" | sed -e 's/.*ENCODER=//ig'`"
+	fi
+fi
+
+if [ "$fileExtension" == "aac" ] || [ "$fileExtension" == "m4a" ]; then
+	if command_exists faad ; then
+		tagTitle="`faad -i "$filePath" 2>&1 | grep -i 'title:' | sed -e 's/title: //'`"
+		tagArtist="`faad -i "$filePath" 2>&1 | grep -i 'artist:' | sed -e 's/artist: //'`"
+		tagAlbum="`faad -i "$filePath" 2>&1 | grep -i 'album:' | sed -e 's/album: //'`"
+		tagDate="`faad -i "$filePath" 2>&1 | grep -i 'date:' | sed -e 's/date: //'`"
+		tagYear="`faad -i "$filePath" 2>&1 | grep -i 'year:' | sed -e 's/year: //'`"
+		tagComment="`faad -i "$filePath" 2>&1 | grep -i 'comment:' | sed -e 's/comment: //'`"
+		tagTrackNumber="`faad -i "$filePath" 2>&1 | grep -i 'track:' | sed -e 's/track: //'`"
+		tagGenre="`faad -i "$filePath" 2>&1 | grep -i 'genre:' | sed -e 's/genre: //'`"
+		tagPublisher="`faad -i "$filePath" 2>&1 | grep -i 'publisher:' | sed -e 's/publisher: //'`"
+		tagLanguage="`faad -i "$filePath" 2>&1 | grep -i 'language:' | sed -e 's/language: //'`"
+		tagEncoder="`faad -i "$filePath" 2>&1 | grep -i 'tool:' | sed -e 's/tool: //'`"
+	fi
+fi
+
+# if [ "$fileExtension" == "mp4" ]; then
+# 	tagTitle="`neroAacTag -list-meta "$filePath" 2>&1 | grep title\ = | sed -e 's/.*title = //g'`"
+# 	tagArtist="`neroAacTag -list-meta "$filePath" 2>&1 | grep artist\ = | sed -e 's/.*artist = //g'`"
+# 	tagAlbum="`neroAacTag -list-meta "$filePath" 2>&1 | grep album\ = | sed -e 's/.*album = //g'`"
+# 	tagDate="`neroAacTag -list-meta "$filePath" 2>&1 | grep date\ = | sed -e 's/.*date = //g'`"
+# 	tagYear="`neroAacTag -list-meta "$filePath" 2>&1 | grep year\ = | sed -e 's/.*year = //g'`"
+# 	tagComment="`neroAacTag -list-meta "$filePath" 2>&1 | grep comment\ = | sed -e 's/.*comment = //g'`"
+# 	tagTrackNumber="`neroAacTag -list-meta "$filePath" 2>&1 | grep track\ = | sed -e 's/.*track = //g'`"
+# 	tagGenre="`neroAacTag -list-meta "$filePath" 2>&1 | grep comment\ = | sed -e 's/.*comment = //g'`"
+# 	tagPublisher="`neroAacTag -list-meta "$filePath" 2>&1 | grep comment\ = | sed -e 's/.*comment = //g'`"
+# fi
+
+case $returnValue in 
+	title) echo $tagTitle;;
+	artist) echo $tagArtist;;
+	album) echo $tagAlbum;;
+	date) echo $tagDate;;
+	year) echo $tagYear;;
+	comment) echo $tagComment;;
+	track) echo $tagTrackNumber;;
+	genre) echo $tagGenre;;
+	publisher) echo $tagPublisher;;
+	language) echo $tagLanguage;;
+	encoder) echo $tagEncoder;;
+	"")
+		echo "Title: $tagTitle"
+		echo "Artist: $tagArtist"
+		echo "Album: $tagAlbum"
+		echo "Date: $tagDate"
+		echo "Year: $tagYear"
+		echo "Comment: $tagComment"
+		echo "Track: $tagTrackNumber"
+		echo "Genre: $tagGenre"
+		echo "Publisher: $tagPublisher"
+		echo "Language: $tagLanguage"
+		echo "Encoder: $tagEncoder"
+	;;
+esac
+
+exit 0

@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# Media Tool Menu
+#
+# Original author: Lars Pontoppidan <leverpostej@gmail.com>
+# with strong inspiration from Kim written by
+# Charles Bouveyron (http://bouveyron.free.fr/kim)
+# All hail the contributors as well
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation.
+
+CMD="$1";
+kdedir=`kde4-config --prefix`
+
+case $CMD in 
+	about) kdialog --title 'About' --textbox "$kdedir/share/mtm/about.txt" 450 400;;
+esac

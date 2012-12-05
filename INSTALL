@@ -1,0 +1,21 @@
+HOW TO INSTALL
+=======================
+
+To install MTM on your computer, run 
+
+./install.sh
+
+as root or with sudo like so:
+sudo ./install.sh
+
+
+HOW TO UNINSTALL
+======================
+
+To uninstall MTM from your computer, run
+
+./uninstall.sh
+
+as root or
+
+sudo ./uninstall.sh
