@@ -5,13 +5,13 @@ mtm
 ## - Convertion between selected formats integrated as KDE4 service menus
 
 # Author
-Original author: Lars Pontoppidan
+Original author: Lars Pontoppidan  
 Strong inspiration from *Kim* written by
 Charles Bouveyron (http://bouveyron.free.fr/kim)
 
 # License
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
+This program is free software; you can redistribute it and/or  
+modify it under the terms of the GNU General Public License  
 as published by the Free Software Foundation.
 
 # Description
@@ -68,11 +68,11 @@ As of now MTM specializes in converting:
 * ogg
 
 # Integration
-The menu will be installed as:
-<right click> -> Actions -> Convert
-or
-<right click> -> Actions -> Dump Audio
-Depending on the file type
+The menu will be installed as:  
+<right click> -> Actions -> Convert  
+or  
+<right click> -> Actions -> Dump Audio  
+Depending on the file type  
 
-Enjoy!
-- Lars
+Enjoy!  
+- Lars and all the contributors
