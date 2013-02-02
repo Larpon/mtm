@@ -12,7 +12,7 @@
 [Desktop Entry]
 Type=Service
 ServiceTypes=KonqPopupMenu/Plugin
-MimeType=video/x-flv
+MimeType=video/x-flv;
 Actions=2wav;2mp3;2ogg;about;
 Encoding=UTF-8
 X-KDE-Submenu=Audio dump
