@@ -6,7 +6,7 @@
 # with strong inspiration from Kim written by
 # Charles Bouveyron (http://bouveyron.free.fr/kim)
 # All hail the contributors as well
-# 
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation.
@@ -25,7 +25,7 @@ usage()
 	echo -e "\t<output format>"
 	echo -e "\t\tUse wav, mp3 or ogg"
 	echo -e "\r"
-	
+
 	#-- example --
 	echo
 	echo "example usage:"
@@ -82,7 +82,14 @@ dumpAudio()
 		return 1 # Error, if argument(s) missing.
 	fi
 	#echo "Echo" "$1" "$2"
-	mplayer -quiet -vo null -vc dummy -af volume=0,resample=44100:0:1 -ao pcm:waveheader:file="$2" "$1"
+
+        # mplayer 1.x
+        #mplayer -quiet -vo null -vc dummy -af volume=0,resample=44100:0:1 -ao pcm:waveheader:file="$2" "$1"
+        # mplayer 2.x
+        #mplayer -quiet -vo null -vc dummy -af volume=0,lavrresample=44100 -ao pcm:waveheader:file="$2" "$1"
+        # mplayer 2.x BUG WORKAROUND
+        mplayer -quiet -vo null -vc dummy -af volume=0 -ao pcm:waveheader:file="$2" "$1"
+
 }
 
 updateProgress()
@@ -107,7 +114,7 @@ checkFail()
 }
 
 readTags()
-{	
+{
 	tagTitle=`$thisbin/mtm_gettag "$1" title`
 	tagArtist=`$thisbin/mtm_gettag "$1" artist`
 	tagAlbum=`$thisbin/mtm_gettag "$1" album`
@@ -130,13 +137,13 @@ for i in "$@";do
 			qdbus $dbusRef close
 			exit 1
 		fi
-		
+
 		filePath="$i"
 		fileDir=$(dirname "$filePath")
 		filename=$(basename "$filePath")
 		fileExtension=${filename##*.}
 		filename=${filename%.*}
-		
+
 		# Preserve tags if any
 		setProgressLabel "Preserving tags $filename"
 		if [ $fromFormat == "mp3" ] || [ $fromFormat == "ogg" ] || [ $fromFormat == "aac" ] || [ $fromFormat == "m4a" ] || [ $fromFormat == "flac" ]; then
@@ -144,14 +151,20 @@ for i in "$@";do
 			checkFail "reading tags..."
 		fi
 		updateProgress
-		
+
 		# Prepare base audio eg. dump to wav or copy wav
 		setProgressLabel "Preparing base audio $filename"
 		if [ $fromFormat != "wav" ] && [ $fromFormat != "amr" ]; then
 			dumpAudio "$filePath" "$tmpPath/$filename.wav"
 			checkFail "dumping $fromFormat audio..."
 		elif [ $fromFormat == "amr" ]; then
-			mplayer -quiet -vo null -vc dummy -af volume=0,format=s16le,resample=44100:0:1 -ao pcm:waveheader:file="$tmpPath/$filename.wav" "$filePath"
+                        # mplayer 1.x
+                        #mplayer -quiet -vo null -vc dummy -af volume=0,format=s16le,resample=44100:0:1 -ao pcm:waveheader:file="$tmpPath/$filename.wav" "$filePath"
+                        # mplayer 2.x
+			#mplayer -quiet -vo null -vc dummy -af volume=0,format=s16le,lavrresample=44100:0:1 -ao pcm:waveheader:file="$tmpPath/$filename.wav" "$filePath"
+                        # mplayer 2.x BUG WORKAROUND
+                        mplayer -quiet -vo null -vc dummy -af volume=0,format=s16le -ao pcm:waveheader:file="$tmpPath/$filename.wav" "$filePath"
+
 			checkFail "dumping amr audio..."
 		else
 			cp "$filePath" "$tmpPath/$filename.wav"
@@ -178,10 +191,10 @@ for i in "$@";do
 			--tn "$tagTrackNumber" \
 			--tg "$tagGenre" \
 			"$tmpPath/$filename.wav" "$fileDir/$filename.mp3"
-			
+
 			checkFail "envoking lame..."
 		fi
-		
+
 		if [ $toFormat == "ogg" ]; then
 			oggenc \
 			--title "$tagTitle" \
@@ -197,12 +210,12 @@ for i in "$@";do
 			--genre "$tagGenre" \
 			-o "$fileDir/$filename.ogg" \
 			"$tmpPath/$filename.wav"
-			
+
 			checkFail "envoking oggenc"
 		fi
-		
+
 		updateProgress
-		
+
 	fi;
 done
 
