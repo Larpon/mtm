@@ -5,13 +5,13 @@ mtm
 ## - Convertion between selected formats integrated as KDE4 service menus
 
 # Author
-Original author: Lars Pontoppidan  
+Original author: Lars Pontoppidan
 Strong inspiration from *Kim* written by
 Charles Bouveyron (http://bouveyron.free.fr/kim)
 
 # License
-This program is free software; you can redistribute it and/or  
-modify it under the terms of the GNU General Public License  
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation.
 
 # Description
@@ -27,6 +27,7 @@ The scripts can (hopefully) easily be extended to more conversions between forma
 In order to have the menus working correctly you should have this commandline software installed on your system:
 
 ## As a minimum:
+* kdialog
 * mplayer
 * lame
 * oggenc
@@ -36,6 +37,9 @@ In order to have the menus working correctly you should have this commandline so
 * vorbiscomment
 * metaflac
 * faad
+
+## Kubuntu 15.04:
+* If you don't have kdialog available try installing 'sudo apt-get install kde-baseapps-bin'
 
 ## Tags
 The tags currently preserved (from/to mp3/ogg/flac/aac) are as follows:
@@ -68,11 +72,11 @@ As of now MTM specializes in converting:
 * ogg
 
 # Integration
-The menu will be installed as:  
-*right click* -> Actions -> Convert  
-or  
-*right click* -> Actions -> Dump Audio  
-Depending on the file type  
+The menu will be installed as:
+*right click* -> Actions -> Convert
+or
+*right click* -> Actions -> Dump Audio
+Depending on the file type
 
-Enjoy!  
+Enjoy!
 - Lars and all the contributors

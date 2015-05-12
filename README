@@ -21,6 +21,7 @@ The scripts can (hopefully) easily be extended to more conversions between forma
 In order to have the menus working correctly you should have this commandline software installed on your system:
 
 As a minimum:
+kdialog
 mplayer
 lame
 oggenc
@@ -30,6 +31,9 @@ id3v2
 vorbiscomment
 metaflac
 faad
+
+Kubuntu 15.04:
+If you don't have kdialog available try installing 'sudo apt-get install kde-baseapps-bin'
 
 The tags currently preserved (from/to mp3/ogg/flac/aac) are as follows:
 Title
