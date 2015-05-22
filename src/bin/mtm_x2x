@@ -82,14 +82,13 @@ dumpAudio()
 		return 1 # Error, if argument(s) missing.
 	fi
 	#echo "Echo" "$1" "$2"
-
-        # mplayer 1.x
-        #mplayer -quiet -vo null -vc dummy -af volume=0,resample=44100:0:1 -ao pcm:waveheader:file="$2" "$1"
-        # mplayer 2.x
-        #mplayer -quiet -vo null -vc dummy -af volume=0,lavrresample=44100 -ao pcm:waveheader:file="$2" "$1"
-        # mplayer 2.x BUG WORKAROUND
-        mplayer -quiet -vo null -vc dummy -af volume=0 -ao pcm:waveheader:file="$2" "$1"
-
+	
+	# mplayer 1.x
+	#mplayer -quiet -vo null -vc dummy -af volume=0,resample=44100:0:1 -ao pcm:waveheader:file="$2" "$1"
+	# mplayer 2.x
+	#mplayer -quiet -vo null -vc dummy -af volume=0,lavrresample=44100 -ao pcm:waveheader:file="$2" "$1"
+	# mplayer 2.x BUG WORKAROUND
+	mplayer -quiet -vo null -vc dummy -af volume=0 -ao pcm:waveheader:file="$2" "$1"
 }
 
 updateProgress()
@@ -158,23 +157,25 @@ for i in "$@";do
 			dumpAudio "$filePath" "$tmpPath/$filename.wav"
 			checkFail "dumping $fromFormat audio..."
 		elif [ $fromFormat == "amr" ]; then
-                        # mplayer 1.x
-                        #mplayer -quiet -vo null -vc dummy -af volume=0,format=s16le,resample=44100:0:1 -ao pcm:waveheader:file="$tmpPath/$filename.wav" "$filePath"
-                        # mplayer 2.x
+			# mplayer 1.x
+			#mplayer -quiet -vo null -vc dummy -af volume=0,format=s16le,resample=44100:0:1 -ao pcm:waveheader:file="$tmpPath/$filename.wav" "$filePath"
+			# mplayer 2.x
 			#mplayer -quiet -vo null -vc dummy -af volume=0,format=s16le,lavrresample=44100:0:1 -ao pcm:waveheader:file="$tmpPath/$filename.wav" "$filePath"
-                        # mplayer 2.x BUG WORKAROUND
-                        mplayer -quiet -vo null -vc dummy -af volume=0,format=s16le -ao pcm:waveheader:file="$tmpPath/$filename.wav" "$filePath"
-
+			# mplayer 2.x BUG WORKAROUND
+			mplayer -quiet -vo null -vc dummy -af volume=0,format=s16le -ao pcm:waveheader:file="$tmpPath/$filename.wav" "$filePath"
 			checkFail "dumping amr audio..."
 		else
-			cp "$filePath" "$tmpPath/$filename.wav"
+			cp -p "$filePath" "$tmpPath/$filename.wav"
 			checkFail "copying wave audio..."
 		fi
+		
+		# Preserve file attributes from original file
+		touch -r "$filePath" "$tmpPath/$filename.wav"
 		updateProgress
 
 		setProgressLabel "Encoding $filename.$toFormat"
 		if [ $fromFormat != "wav" ] && [ $toFormat == "wav" ]; then
-			cp "$tmpPath/$filename.wav" "$fileDir/$filename.wav"
+			cp -p "$tmpPath/$filename.wav" "$fileDir/$filename.wav"
 			checkFail "copying wave..."
 		fi
 
@@ -192,6 +193,8 @@ for i in "$@";do
 			--tg "$tagGenre" \
 			"$tmpPath/$filename.wav" "$fileDir/$filename.mp3"
 
+			# Preserve file attributes from original file
+			touch -r "$filePath" "$fileDir/$filename.mp3"
 			checkFail "envoking lame..."
 		fi
 
@@ -211,6 +214,8 @@ for i in "$@";do
 			-o "$fileDir/$filename.ogg" \
 			"$tmpPath/$filename.wav"
 
+			# Preserve file attributes from original file
+			touch -r "$filePath" "$fileDir/$filename.ogg"
 			checkFail "envoking oggenc"
 		fi
 
