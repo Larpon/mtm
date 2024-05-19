@@ -12,7 +12,7 @@
 # as published by the Free Software Foundation.
 
 CMD="$1";
-kdedir=`kde4-config --prefix`
+kdedir=`kf5-config --prefix`
 
 case $CMD in 
 	about) kdialog --title 'About' --textbox "$kdedir/share/mtm/about.txt" 450 400;;

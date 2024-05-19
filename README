@@ -10,8 +10,8 @@
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation.
 
-The Media Tool Menu KDE4 service menu (MTM) is a bunch
-of KDE¤ service menus that integrates into konqueror, dolphin or any other software that utilitize KDE4 service menus.
+The Media Tool Menu KDE5 service menu (MTM) is a bunch
+of KDE¤ service menus that integrates into konqueror, dolphin or any other software that utilitize KDE5 service menus.
 
 The tool scripts can convert to and from various audio formats as well as dump audio from .flv videos
 The service menus are using shell scripts and common audio and video commandline tools to do all the hard work.
@@ -22,7 +22,7 @@ In order to have the menus working correctly you should have this commandline so
 
 As a minimum:
 kdialog
-mplayer
+ffmpeg
 lame
 oggenc
 

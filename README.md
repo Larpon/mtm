@@ -1,8 +1,14 @@
 mtm
 ===
 
+# NOTE
+
+It's been 9 years... Support for KDE4 (legacy) has been moved to the `kde4` branch.
+The `master` branch of this repository now supports KDE5/6 (KDE Frameworks 5.x and 6.x).
+Also `mplayer` usage has been removed in favor of `ffmpeg`
+
 # Media Tool Menu
-## - Convertion between selected formats integrated as KDE4 service menus
+## - Convertion between selected formats integrated as KDE5/6 service menus
 
 # Author
 Original author: Lars Pontoppidan
@@ -15,8 +21,8 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation.
 
 # Description
-The Media Tool Menu (MTM) KDE4 service menus is a bunch
-of KDE4 service menus that integrates into konqueror, dolphin or any other software that utilitize KDE4 service menus.
+The Media Tool Menu (MTM) KDE service menus is a bunch
+of KDE service menus that integrates into konqueror, dolphin or any other software that utilitize KDE service menus.
 
 The tool scripts can convert to and from various audio formats as well as dump audio from .flv videos
 The service menus are using shell scripts and common audio and video commandline tools to do all the hard work.
@@ -28,7 +34,7 @@ In order to have the menus working correctly you should have this commandline so
 
 ## As a minimum:
 * kdialog
-* mplayer
+* ffmpeg
 * lame
 * oggenc
 
@@ -37,9 +43,6 @@ In order to have the menus working correctly you should have this commandline so
 * vorbiscomment
 * metaflac
 * faad
-
-## Kubuntu 15.04:
-* If you don't have kdialog available try installing 'sudo apt-get install kde-baseapps-bin'
 
 ## Tags
 The tags currently preserved (from/to mp3/ogg/flac/aac) are as follows:
